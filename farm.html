@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>蛋蛋农场</title>
+  <link rel="stylesheet" href="farm.css" />
+</head>
+<body>
+  <div class="hill h1"></div>
+  <div class="hill h2"></div>
+  <div class="hill h3"></div>
+
+  <div class="topbar">
+    <a class="home-btn" href="index.html" title="返回首页">🏠</a>
+    <div class="farm-title">🌱 蛋蛋农场</div>
+    <div class="count-chip" id="count-chip">0 只蛋仔</div>
+  </div>
+
+  <div id="field"></div>
+
+  <div class="empty hidden" id="empty">
+    <div class="big">🪹</div>
+    <p>农场还空空的～<br>快去抓几只蛋仔回来吧！</p>
+    <a class="go" href="game.html">去抓蛋 🥚</a>
+  </div>
+
+  <script src="save.js"></script>
+  <script src="farm.js"></script>
+</body>
+</html>

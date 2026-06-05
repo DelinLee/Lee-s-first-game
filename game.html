@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>抓蛋 · 小艾抓蛋仔大作战</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="game-wrap">
+    <canvas id="game"></canvas>
+
+    <!-- 返回首页 -->
+    <a id="home-btn" href="index.html" title="返回首页">🏠</a>
+
+    <!-- 顶部 HUD -->
+    <div id="hud" class="hidden">
+      <div class="hud-left">
+        <span id="level-name">第 1 关 · 黄蛋</span>
+      </div>
+      <div class="hud-right">
+        <span id="timer">⏱ 30</span>
+      </div>
+    </div>
+
+    <!-- 图鉴：已抓到的蛋 -->
+    <div id="dex" class="hidden"></div>
+
+    <!-- 触屏摇杆 -->
+    <div id="joystick" class="hidden">
+      <div id="joystick-knob"></div>
+    </div>
+    <!-- 触屏抓捕键 -->
+    <button id="catch-btn" class="hidden">抓!</button>
+
+    <!-- 各种覆盖层 -->
+    <div id="overlay" class="overlay">
+      <div class="panel" id="panel"></div>
+    </div>
+  </div>
+
+  <script src="save.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

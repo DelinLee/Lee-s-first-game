@@ -1,0 +1,82 @@
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  user-select: none; -webkit-user-select: none;
+  /* 美术插槽：农场背景图 -> assets/ui/farm_bg.png */
+  /* background: url("assets/ui/farm_bg.png") center/cover no-repeat; */
+  background: linear-gradient(180deg, #bfe9ff 0%, #d9f3c4 42%, #a6dd7e 100%);
+}
+
+/* 远处草坡装饰 */
+.hill {
+  position: absolute; left: -10%; width: 120%; border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+}
+.hill.h1 { bottom: 30%; height: 40%; background: #9ed572; }
+.hill.h2 { bottom: 18%; height: 38%; background: #8ccb63; }
+.hill.h3 { bottom: 0;   height: 34%; background: #79bf52; }
+
+/* 顶部栏 */
+.topbar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 20;
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+}
+.home-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; text-decoration: none;
+  background: rgba(60,90,50,0.78);
+  box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+}
+.home-btn:active { transform: translateY(3px); box-shadow: none; }
+.farm-title {
+  font-size: 22px; font-weight: 900; color: #fff;
+  text-shadow: 0 2px 0 rgba(80,120,50,0.5);
+}
+.count-chip {
+  margin-left: auto;
+  background: rgba(255,255,255,0.85); color: #4a7a2a;
+  font-weight: 800; font-size: 15px;
+  padding: 8px 14px; border-radius: 999px;
+}
+
+.hidden { display: none !important; }
+
+/* 蛋活动场地 */
+#field { position: absolute; inset: 0; overflow: hidden; }
+.farm-egg {
+  position: absolute; left: 0; top: 0;
+  image-rendering: pixelated;
+  will-change: transform;
+  transform-origin: bottom center;
+}
+.farm-egg .shadow {
+  position: absolute; left: 50%; bottom: -6px;
+  width: 70%; height: 14px; border-radius: 50%;
+  background: rgba(40,70,20,0.22);
+  transform: translateX(-50%);
+}
+.badge {
+  position: absolute; top: -6px; right: -6px;
+  background: #ff7aa8; color: #fff; font-size: 11px; font-weight: 800;
+  padding: 1px 6px; border-radius: 999px; border: 2px solid #fff;
+}
+
+/* 空状态 */
+.empty {
+  position: absolute; inset: 0; z-index: 15;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  padding: 24px;
+}
+.empty .big { font-size: 64px; margin-bottom: 12px; }
+.empty p { color: #4a7a2a; font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+.empty .go {
+  text-decoration: none; color: #fff; font-weight: 800; font-size: 20px;
+  background: linear-gradient(#ffa15a, #ee6a2c);
+  padding: 16px 34px; border-radius: 999px;
+  box-shadow: 0 6px 0 #b8480f;
+}
+.empty .go:active { transform: translateY(5px); box-shadow: 0 1px 0 #b8480f; }

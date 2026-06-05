@@ -1,0 +1,98 @@
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  /* 美术插槽：以后把背景图丢到 assets/ui/home_bg.png，取消下一行注释即可 */
+  /* background: url("assets/ui/home_bg.png") center/cover no-repeat; */
+  background: linear-gradient(165deg, #ffe9b0 0%, #ffd6e6 45%, #cfe5ff 100%);
+  user-select: none; -webkit-user-select: none;
+}
+
+/* 飘动的装饰蛋 */
+.float-egg {
+  position: absolute; bottom: -60px;
+  width: 64px; height: auto;
+  image-rendering: pixelated;
+  opacity: 0.9;
+  animation: floatUp linear infinite;
+  pointer-events: none;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: .9; }
+  90%  { opacity: .9; }
+  100% { transform: translateY(-115vh) rotate(20deg); opacity: 0; }
+}
+
+/* 主容器 */
+.home {
+  position: relative; z-index: 5;
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 24px;
+}
+
+/* 标题（美术插槽：可替换成 logo 图片） */
+.logo {
+  /* 若有 logo 图：<img class="logo-img" src="assets/ui/logo.png"> 替换 .title 即可 */
+}
+.title {
+  font-size: clamp(30px, 8vw, 54px);
+  font-weight: 900;
+  color: #7a3aa8;
+  text-shadow: 0 3px 0 #fff, 0 6px 0 rgba(122,58,168,0.25);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.subtitle {
+  font-size: clamp(14px, 3.6vw, 19px);
+  color: #b5638f; font-weight: 600;
+  margin-bottom: 22px;
+}
+
+/* 小艾立绘 */
+.hero {
+  height: clamp(150px, 34vh, 280px); width: auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 12px 10px rgba(120,70,150,0.28));
+  animation: bob 2.4s ease-in-out infinite;
+  margin-bottom: 10px;
+}
+@keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+/* 按钮 */
+.menu { display: flex; flex-direction: column; gap: 16px; width: min(320px, 80vw); margin-top: 6px; }
+.menu-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 18px 24px;
+  font-size: clamp(18px, 5vw, 23px); font-weight: 800;
+  color: #fff; text-decoration: none;
+  border-radius: 999px;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.2), 0 10px 18px rgba(0,0,0,0.18);
+  transition: transform .05s;
+}
+.menu-btn .emo { font-size: 1.2em; }
+.menu-btn.play { background: linear-gradient(#ffa15a, #ee6a2c); }
+.menu-btn.farm { background: linear-gradient(#6fd08a, #36a85e); }
+.menu-btn:active { transform: translateY(5px); box-shadow: 0 1px 0 rgba(0,0,0,0.2); }
+
+/* 收集进度 */
+.progress {
+  margin-top: 22px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 999px; padding: 8px 16px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 15px; font-weight: 700; color: #7a4ab0;
+}
+.progress .dots { display: flex; gap: 5px; }
+.progress .dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(122,74,176,0.22);
+}
+.progress .dot.on { background: #ffce4d; box-shadow: 0 0 0 2px #fff inset; }
+
+.credit {
+  position: absolute; bottom: 10px; width: 100%; text-align: center;
+  font-size: 12px; color: rgba(122,74,176,0.55); z-index: 5;
+}
