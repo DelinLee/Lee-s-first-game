@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>小艾抓蛋仔大作战</title>
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <!-- 飘动的装饰蛋（JS 生成） -->
+  <div id="floaties"></div>
+
+  <div class="home">
+    <div class="logo">
+      <div class="title">小艾抓蛋仔大作战</div>
+    </div>
+    <div class="subtitle">帮小艾抓住 5 只调皮的蛋仔吧！</div>
+
+    <img class="hero" src="assets/xiaoai/idle_t.png" alt="小艾" />
+
+    <nav class="menu">
+      <a class="menu-btn play" href="game.html"><span class="emo">🥚</span> 开始抓蛋</a>
+      <a class="menu-btn farm" href="farm.html"><span class="emo">🌱</span> 蛋蛋农场</a>
+    </nav>
+
+    <div class="progress">
+      已收集
+      <div class="dots" id="prog-dots"></div>
+      <span id="prog-text">0 / 5</span>
+    </div>
+  </div>
+
+  <div class="credit">用 ❤️ 为你制作</div>
+
+  <script src="save.js"></script>
+  <script>
+    // 飘动装饰蛋
+    const COLORS = ["yellow", "pink", "blue", "black", "white"];
+    const fl = document.getElementById("floaties");
+    for (let i = 0; i < 9; i++) {
+      const img = document.createElement("img");
+      const c = COLORS[i % COLORS.length];
+      img.src = `assets/egg/${c}/idle.png`;
+      img.className = "float-egg";
+      img.style.left = (5 + Math.random() * 90) + "vw";
+      const dur = 9 + Math.random() * 8;
+      img.style.animationDuration = dur + "s";
+      img.style.animationDelay = (-Math.random() * dur) + "s";
+      img.style.width = (44 + Math.random() * 36) + "px";
+      fl.appendChild(img);
+    }
+
+    // 收集进度
+    const dots = document.getElementById("prog-dots");
+    const caught = Save.caughtColors();
+    COLORS.forEach(c => {
+      const d = document.createElement("div");
+      d.className = "dot" + (caught.includes(c) ? " on" : "");
+      dots.appendChild(d);
+    });
+    document.getElementById("prog-text").textContent = `${caught.length} / 5`;
+  </script>
+</body>
+</html>
