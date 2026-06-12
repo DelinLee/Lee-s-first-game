@@ -8,6 +8,18 @@ body {
   user-select: none; -webkit-user-select: none;
 }
 
+/* 返回大陆 */
+.back-continent {
+  position: absolute; top: 16px; left: 16px; z-index: 20;
+  display: inline-flex; align-items: center; gap: 6px;
+  text-decoration: none;
+  background: rgba(122, 74, 176, 0.85); color: #fff;
+  font-size: 15px; font-weight: 700;
+  padding: 9px 16px; border-radius: 999px;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.18);
+}
+.back-continent:active { transform: translateY(3px); box-shadow: none; }
+
 /* 飘动的装饰蛋 */
 .float-egg {
   position: absolute; bottom: -60px;

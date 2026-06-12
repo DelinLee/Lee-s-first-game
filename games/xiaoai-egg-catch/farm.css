@@ -44,6 +44,16 @@ body {
 
 .hidden { display: none !important; }
 
+/* 静音开关（农场右下角，避开顶栏）*/
+#sound-toggle {
+  position: absolute; right: 16px; bottom: 16px; z-index: 40;
+  width: 46px; height: 46px; border-radius: 50%;
+  border: none; cursor: pointer; font-size: 20px;
+  background: rgba(60, 90, 50, 0.8); color: #fff;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+}
+#sound-toggle:active { transform: translateY(3px); box-shadow: none; }
+
 /* 蛋活动场地 */
 #field { position: absolute; inset: 0; overflow: hidden; }
 .farm-egg {

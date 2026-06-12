@@ -57,9 +57,19 @@ function spawnEgg(color) {
     hopCd: 0.5 + Math.random() * 2.5,
     facing: 1,
     squash: 1,
+    spinT: 0,
   };
+  // 点一下，蛋仔开心地蹦一下 + 转个圈
+  wrap.style.cursor = "pointer";
+  wrap.addEventListener("pointerdown", (ev) => { ev.preventDefault(); cheer(e); });
   eggs.push(e);
   return e;
+}
+
+function cheer(e) {
+  e.hv = Math.max(e.hv, 640);
+  e.spinT = 0.5;
+  if (window.Audio2) Audio2.sfx.pop();
 }
 
 // 生成蛋（按抓到次数，单色封顶）
@@ -98,7 +108,9 @@ function update(dt) {
       e.hopCd = 1.2 + Math.random() * 2.8;
       // 偶尔换个方向 / 速度
       if (Math.random() < 0.5) e.vx = (Math.random() < 0.5 ? -1 : 1) * (25 + Math.random() * 55);
+      if (window.Audio2 && Math.random() < 0.12) Audio2.sfx.hop();  // 稀疏的蹦跳声
     }
+    if (e.spinT > 0) e.spinT -= dt;
     if (e.hv > 0 || e.h > 0) {
       e.hv -= GRAV * dt;
       e.h += e.hv * dt;
@@ -116,8 +128,9 @@ function update(dt) {
     const sc = depthScale(e.gy);
     const sy = sc * e.squash;
     const sx = sc * e.facing * (2 - e.squash);   // 压扁时横向略胖
+    const rot = e.spinT > 0 ? (e.spinT / 0.5) * Math.PI * 2 * e.facing : 0;  // 被点后转圈
     e.wrap.style.transform =
-      `translate(${e.x}px, ${e.gy - e.h}px) translate(-50%, -100%) scale(${sx}, ${sy})`;
+      `translate(${e.x}px, ${e.gy - e.h}px) translate(-50%, -100%) rotate(${rot}rad) scale(${sx}, ${sy})`;
     e.wrap.style.zIndex = Math.round(e.gy);
   }
 }
@@ -132,3 +145,9 @@ function loop(t) {
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
+
+// 音效：挂静音按钮，首次点击后响起轻快 BGM
+if (window.Audio2) {
+  Audio2.mountToggleButton();
+  window.addEventListener("pointerdown", () => Audio2.bgm.start(), { once: true });
+}

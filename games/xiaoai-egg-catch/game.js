@@ -168,7 +168,7 @@ let lastT = 0;
 
 const xiaoai = {
   x: 0, y: 0, vx: 0, vy: 0,
-  speed: 230,
+  speed: 252,
   facing: 1,          // 1 右, -1 左
   walkPhase: 0,       // 走路晃动相位
   moving: false,
@@ -209,6 +209,7 @@ function startLevel(i) {
   egg.state = "run"; egg.freezeT = 0; egg.poseT = 0;
   inRange = false;
   state = "playing";
+  if (window.Audio2) Audio2.bgm.start();
   showOverlay(false);
   document.getElementById("hud").classList.remove("hidden");
   renderDex();
@@ -222,6 +223,7 @@ function startLevel(i) {
 
 function levelClear() {
   state = "clear";
+  if (window.Audio2) Audio2.sfx.clear();
   if (!caught.includes(LEVELS[levelIndex].key)) caught.push(LEVELS[levelIndex].key);
   if (typeof Save !== "undefined") Save.addCaught(LEVELS[levelIndex].key);  // 存进农场
   renderDex();
@@ -234,6 +236,7 @@ function levelClear() {
     <button class="btn" id="next-btn">${levelIndex < LEVELS.length - 1 ? "下一关 →" : "看结局 ♥"}</button>
   `);
   document.getElementById("next-btn").onclick = () => {
+    if (window.Audio2) Audio2.sfx.click();
     if (levelIndex < LEVELS.length - 1) startLevel(levelIndex + 1);
     else winGame();
   };
@@ -241,6 +244,7 @@ function levelClear() {
 
 function loseLevel() {
   state = "lose";
+  if (window.Audio2) Audio2.sfx.lose();
   hideTouchControls();
   const lv = LEVELS[levelIndex];
   showPanel(`
@@ -249,11 +253,12 @@ function loseLevel() {
     <div class="big-egg">${eggIcon(lv.key, 80)} 💨</div>
     <button class="btn" id="retry-btn">再抓一次</button>
   `);
-  document.getElementById("retry-btn").onclick = () => startLevel(levelIndex);
+  document.getElementById("retry-btn").onclick = () => { if (window.Audio2) Audio2.sfx.click(); startLevel(levelIndex); };
 }
 
 function winGame() {
   state = "win";
+  if (window.Audio2) Audio2.sfx.win();
   hideTouchControls();
   document.getElementById("hud").classList.add("hidden");
   const eggs = LEVELS.map(l => eggIcon(l.key, 56)).join(" ");
@@ -263,7 +268,7 @@ function winGame() {
     <a class="btn" href="farm.html">去蛋蛋农场 🌱</a>
     <button class="btn btn-ghost" id="restart-btn">再玩一次</button>
   `);
-  document.getElementById("restart-btn").onclick = () => { caught = []; startLevel(0); };
+  document.getElementById("restart-btn").onclick = () => { if (window.Audio2) Audio2.sfx.click(); caught = []; startLevel(0); };
 }
 
 function showTitle() {
@@ -281,7 +286,7 @@ function showTitle() {
     ${ctrl}
     <button class="btn" id="start-btn">开始游戏</button>
   `);
-  document.getElementById("start-btn").onclick = () => { caught = []; startLevel(0); };
+  document.getElementById("start-btn").onclick = () => { if (window.Audio2) Audio2.sfx.click(); caught = []; startLevel(0); };
 }
 
 function hideTouchControls() {
@@ -335,7 +340,11 @@ function tryCatch() {
     const d = Math.hypot(egg.x - xiaoai.x, egg.y - xiaoai.y);
     if (d <= CATCH_RADIUS && egg.state !== "caught") {
       egg.state = "caught";
+      if (window.Audio2) Audio2.sfx.catch();
+      spawnSparkle(egg.x, egg.y - 40);
       setTimeout(levelClear, 350);
+    } else {
+      if (window.Audio2) Audio2.sfx.pop();   // 扑空
     }
   }, 150);
 }
@@ -410,7 +419,7 @@ function updateEgg(dt) {
       break;
     }
     case "stubborn": {        // 蓝蛋：远远就往反方向硬跑，速度快
-      speed = 250;
+      speed = 236;
       ax = -dx/dist; ay = -dy/dist;
       break;
     }
@@ -419,7 +428,7 @@ function updateEgg(dt) {
       if (dist < 120 && egg.freezeT <= 0 && Math.random() < dt*2.5) egg.freezeT = 0.7;
       if (egg.freezeT > 0) { egg.freezeT -= dt; speed = 0; }
       else {
-        speed = 270;
+        speed = 246;
         if (egg.poseT <= 0) { egg.poseT = 0.4+Math.random()*0.4; egg.wx=Math.random()*2-1; egg.wy=Math.random()*2-1; }
         ax = egg.wx*0.5 - dx/dist; ay = egg.wy*0.5 - dy/dist;
       }
@@ -484,6 +493,48 @@ function drawSprite(canv, x, y, h, facing, opts={}) {
   ctx.restore();
 }
 
+// ---------- 抓到时的星星迸发特效 ----------
+const fx = [];
+const FX_COLORS = ["#ffd84d", "#ff8ac4", "#7ad0ff", "#fff0a8", "#b6f08a"];
+function spawnSparkle(x, y) {
+  for (let i = 0; i < 14; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const sp = 120 + Math.random() * 200;
+    fx.push({
+      x, y,
+      vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 80,
+      born: performance.now(), life: 0.5 + Math.random() * 0.35,
+      size: 6 + Math.random() * 8,
+      color: FX_COLORS[(Math.random() * FX_COLORS.length) | 0],
+      rot: Math.random() * Math.PI,
+    });
+  }
+}
+function drawStar(cx, cy, r, rot, color, alpha) {
+  ctx.save();
+  ctx.translate(cx, cy); ctx.rotate(rot);
+  ctx.globalAlpha = alpha; ctx.fillStyle = color;
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    const o = (i * 4 * Math.PI) / 5 - Math.PI / 2;
+    ctx[i ? "lineTo" : "moveTo"](Math.cos(o) * r, Math.sin(o) * r);
+  }
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+function drawFx() {
+  const now = performance.now();
+  for (let i = fx.length - 1; i >= 0; i--) {
+    const p = fx[i];
+    const e = (now - p.born) / 1000;
+    if (e >= p.life) { fx.splice(i, 1); continue; }
+    const t = e / p.life;
+    const px = p.x + p.vx * e;
+    const py = p.y + p.vy * e + 260 * e * e;   // 受重力下落
+    drawStar(px, py, p.size * (1 - t * 0.5), p.rot + e * 6, p.color, 1 - t);
+  }
+}
+
 function render() {
   ctx.clearRect(0, 0, W, H);
   drawGround();
@@ -512,6 +563,8 @@ function render() {
     ents.sort((a,b) => a.y - b.y);
     for (const e of ents) e.draw();
   }
+
+  drawFx();   // 星星特效画在最上层
 }
 
 function drawGround() {
@@ -585,6 +638,7 @@ function loop(t) {
   await loadAll();
   for (const c of EGG_COLORS) if (eggImg[c] && eggImg[c].idle) EGG_THUMB[c] = eggImg[c].idle.toDataURL();
   resize();
+  if (window.Audio2) Audio2.mountToggleButton();
   showTitle();
   requestAnimationFrame(loop);
 })();

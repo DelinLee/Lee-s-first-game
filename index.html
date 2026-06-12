@@ -2,48 +2,51 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lee 理想中的游戏大陆</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Lee 的梦想大陆</title>
+  <link rel="icon" type="image/png" href="games/xiaoai-egg-catch/assets/egg/yellow/idle.png" />
   <link rel="stylesheet" href="continent.css" />
 </head>
 <body>
-  <main class="page">
-    <section class="intro" aria-labelledby="site-title">
-      <div class="intro-copy">
-        <p class="eyebrow">Lee's Game Continent</p>
-        <h1 id="site-title">Lee 理想中的游戏大陆</h1>
-        <p class="lead">这里会慢慢收纳我做出来、想出来、还在发芽的小游戏。每一个入口都是一块新的土地。</p>
-      </div>
-      <img class="mascot" src="games/xiaoai-egg-catch/assets/xiaoai/idle_t.png" alt="小艾" />
-    </section>
+  <div class="stage">
+    <div class="map" id="map">
+      <!-- 底图：优先空背景 continent_base.png；没有则回退整张 continent_bg.png -->
+      <img class="base-layer" id="base"
+           src="assets/ui/continent_base.png" alt="Lee 的梦想大陆"
+           onerror="this.onerror=null; this.src='assets/ui/continent_bg.png';" />
 
-    <section class="shelf" aria-label="游戏项目">
-      <article class="game-card live">
-        <div class="game-art">
-          <img src="games/xiaoai-egg-catch/assets/egg/yellow/idle.png" alt="黄蛋仔" />
-          <img src="games/xiaoai-egg-catch/assets/egg/pink/idle.png" alt="粉蛋仔" />
-          <img src="games/xiaoai-egg-catch/assets/egg/blue/idle.png" alt="蓝蛋仔" />
-        </div>
-        <div class="game-body">
-          <p class="status">已开放</p>
-          <h2>小艾抓蛋仔大作战</h2>
-          <p>操控小艾，在限时关卡里抓住 5 只性格不同的蛋仔。抓到的蛋会回到农场里散步。</p>
-          <div class="actions">
-            <a class="primary" href="games/xiaoai-egg-catch/">进入游戏</a>
-            <a class="secondary" href="games/xiaoai-egg-catch/farm.html">蛋蛋农场</a>
-          </div>
-        </div>
-      </article>
+      <!-- 建筑分层：各自整画布、透明、原位；缺失则自动隐藏。transform-origin 由 JS 设为该建筑中心 -->
+      <img class="blayer" data-key="mountain" src="assets/ui/layer_mountain.png" alt=""
+           onerror="this.classList.add('missing')" />
+      <img class="blayer" data-key="forest" src="assets/ui/layer_forest.png" alt=""
+           onerror="this.classList.add('missing')" />
+      <img class="blayer" data-key="harbor" src="assets/ui/layer_harbor.png" alt=""
+           onerror="this.classList.add('missing')" />
+      <img class="blayer" data-key="town" src="assets/ui/layer_town.png" alt=""
+           onerror="this.classList.add('missing')" />
+      <img class="blayer" data-key="farm" src="assets/ui/layer_farm.png" alt=""
+           onerror="this.classList.add('missing')" />
 
-      <article class="game-card quiet">
-        <div class="placeholder-mark">02</div>
-        <div class="game-body">
-          <p class="status">待开垦</p>
-          <h2>下一片游戏土地</h2>
-          <p>新的小游戏会继续长在这里。现在先把第一块地照顾好。</p>
-        </div>
-      </article>
-    </section>
-  </main>
+      <header class="title-band">
+        <p class="eyebrow">LEE'S DREAM CONTINENT</p>
+        <h1>Lee 的梦想大陆</h1>
+      </header>
+
+      <!-- 跟随鼠标的名字提示 -->
+      <div id="tip" class="tip" hidden></div>
+    </div>
+  </div>
+
+  <!-- 敬请期待 弹窗 -->
+  <div class="modal-mask" id="modal" hidden>
+    <div class="modal-card">
+      <div class="modal-emoji" id="modal-emoji">🚧</div>
+      <h2 id="modal-title">敬请期待</h2>
+      <p id="modal-desc">这片土地还在发芽，新的玩法很快会长出来。</p>
+      <button class="modal-close" id="modal-close">知道啦</button>
+    </div>
+  </div>
+
+  <script src="continent.js"></script>
 </body>
 </html>
